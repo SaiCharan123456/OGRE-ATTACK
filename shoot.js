@@ -9,7 +9,7 @@ AFRAME.registerComponent("bullets", {
 
         bullet.setAttribute("geometry", {
           primitive: "sphere",
-          radius: 0.1,
+          radius: 0.2,
         });
 
         bullet.setAttribute("material", "color", "black");
@@ -37,8 +37,10 @@ AFRAME.registerComponent("bullets", {
         //set the bullet as the dynamic entity
         bullet.setAttribute("dynamic-body", {
           shape: "sphere",
-          mass: "5",
+          mass: "0",
         });
+
+        bullet.setAttribute("visible", true);
 
         //add the collide event listener to the bullet
         bullet.addEventListener("collide", this.removeBullet);
@@ -59,29 +61,32 @@ AFRAME.registerComponent("bullets", {
     //element which is hit
     var elementHit = e.detail.body.el;
 
-    if (elementHit.id.includes("enemy")) {
+    
+  if(elementHit.id.includes("enemy")){     
+
+    var countTankEl = document.querySelector("#countTank");
+    var tankFired = parseInt(countTankEl.getAttribute("text").value);
+    tankFired -= 1;
+
+    countTankEl.setAttribute("text", {
+      value: tankFired
+    });
+
+    if (tankFired === 0) {
+      var txt = document.querySelector("#completed");
+      txt.setAttribute("visible", true);       
       
-      var countTankEl = document.querySelector("#countTank");
-      var tanksFired = parseInt(countTankEl.getAttribute("text").value);
-      tanksFired -= 1;
-
-      countTankEl.setAttribute("text", {
-        value: tanksFired
-      });
-
-      if (tanksFired === 0) {
-        var txt = document.querySelector("#completed");
-        txt.setAttribute("visible", true);       
-        
-      }
-      scene.removeChild(elementHit);
     }
-    //remove event listener
-    element.removeEventListener("collide", this.removeBullet);
+    scene.removeChild(elementHit);
+  }
 
-    //remove the bullets from the scene   
-    scene.removeChild(element);
-  },
+  //remove event listener
+  element.removeEventListener("collide", this.removeBullet);
+
+  //remove the bullets from the scene      
+  scene.removeChild(element);
+
+},
   shootSound: function () {
     var entity = document.querySelector("#sound1");
     entity.components.sound.playSound();

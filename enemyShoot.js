@@ -1,6 +1,6 @@
 AFRAME.registerComponent("enemy-bullets", {
     init: function () {
-        setInterval(this.shootEnemyBullet, 2000)
+        setInterval(this.shootEnemyBullet, 3000)
     },
     shootEnemyBullet: function () {
 
